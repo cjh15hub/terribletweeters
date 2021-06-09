@@ -12,10 +12,10 @@ public class Monster : MonoBehaviour
     public Sprite deadSprite;
 
     [SerializeField]
-    public float ouchForce = 19.5f;
+    public double ouchForce = 4f;
 
     [SerializeField]
-    public float newtonHealth = 40;
+    public double newtonHealth = 40;
 
     // component references
     private new Rigidbody2D rigidbody;
@@ -25,10 +25,8 @@ public class Monster : MonoBehaviour
 
     public bool isDead
     {
-        get { return _isDead; }
-        private set { _isDead = value; }
+        get { return newtonHealth <= 0; }
     }
-    private bool _isDead;
 
 
     private Vector2 velocity;
@@ -44,91 +42,57 @@ public class Monster : MonoBehaviour
 
     private void Start()
     {
-        isDead = false;
+        
     }
 
     private void FixedUpdate()
     {
-        
+        if (newtonHealth <= 0)
+        {
+            Die();
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(ShouldDieFromCollision(collision))
-        {
-            Die();
-        }
+        TakeDamage(collision);
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (ShouldDieFromCollision(collision))
-        {
-            Die();
-        }
+        //TakeDamage(collision);
     }
 
-    private bool ShouldDieFromCollision(Collision2D collision)
+    private void TakeDamage(Collision2D collision)
     {
-        if (isDead) return false;
+
+        // monsters are squishy and won't hurt each other
+        if (isDead || collision.gameObject.GetComponent<Monster>())
+        {
+            return;
+        }
 
         // if collision is with a bird, always consider it a kill
         Bird bird = collision.gameObject.GetComponent<Bird>();
         if (bird)
         {
             newtonHealth = 0;
-            return true;
         }
-
-        // monsters are squishy and won't hurt each other
-        Monster anotherMonster = collision.gameObject.GetComponent<Monster>();
-        if (anotherMonster) return false;
-
-        // if something falls onto the monster
-        //if (collision.contacts[0].normal.y < -0.5)
-        //{
-        //    // return true;
-        //}
-        //else 
-        if(collision.gameObject.tag == "BluntObject")
+        else if (collision.gameObject.tag == "BluntObject")
         {
-            const float almostZero = 0.0001f;
-            var otherAccelerometer = collision.gameObject.GetComponent<Accelerometer>();
+            Accelerometer otherAccelerometer = collision.gameObject.GetComponent<Accelerometer>();
 
-            var relativeVelocity = accelerometer.velocity - otherAccelerometer.velocity;
+            if (otherAccelerometer.impactForce.magnitude >= ouchForce)
+            {
 
-            if (accelerometer.velocity.magnitude > almostZero && otherAccelerometer.velocity.magnitude > almostZero)
-            {
-                // both objects moving
-                newtonHealth -= CalculateDamage((rigidbody.mass + collision.rigidbody.mass), relativeVelocity, ouchForce);
+                newtonHealth -= otherAccelerometer.impactForce.magnitude;
             }
-            else if(accelerometer.velocity.magnitude > almostZero)
-            {
-                // monster is moving
-                newtonHealth -= CalculateDamage(rigidbody.mass, relativeVelocity, ouchForce);
-            }
-            else if(otherAccelerometer.velocity.magnitude > almostZero)
-            {
-                // other is moving
-                newtonHealth -= CalculateDamage(collision.rigidbody.mass, relativeVelocity, ouchForce);
-            }
-
         }
-
-        return newtonHealth <= 0;
-    }
-
-    private float CalculateDamage(float mass, Vector2 relativeVelocity, float minForce)
-    {
-        var exertedForce = 0.5f * mass * Mathf.Pow(relativeVelocity.magnitude, 2);
-
-        if (exertedForce > minForce) return exertedForce;
-        else return 0;
     }
 
     private void Die()
     {
-        isDead = true;
+        newtonHealth = 0;
         spriteRenderer.sprite = deadSprite;
         poofParticleSystem.Play();
 
