@@ -20,8 +20,10 @@ public class Bird : MonoBehaviour
     private SpriteRenderer spriteRenderer;
 
 
-    private Vector2 startPosition;
+    public Vector2 startPosition { get; private set; }
     private bool ready;
+
+    public bool isDragging { get; private set; }
 
 
     private void Awake()
@@ -30,12 +32,13 @@ public class Bird : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         mainCamera = Camera.main;
+
+        startPosition = rigidbody.position;
     }
 
     private void Start()
     {
         rigidbody.isKinematic = true;
-        startPosition = rigidbody.position;
 
         ready = true;
     }
@@ -55,6 +58,8 @@ public class Bird : MonoBehaviour
         if(ready)
         {
             spriteRenderer.color = selectedColor;
+
+            isDragging = true;
         }
     }
 
@@ -75,6 +80,8 @@ public class Bird : MonoBehaviour
             // apply normilized force vector multiplied by magnitude of pull distance 
             rigidbody.AddForce(direction * (launchForce * magnitude));
         }
+
+        isDragging = false;
     }
 
     private void OnMouseDrag()

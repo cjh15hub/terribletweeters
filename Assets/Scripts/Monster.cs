@@ -15,7 +15,11 @@ public class Monster : MonoBehaviour
     public float ouchForce = 19.5f;
 
     [SerializeField]
-    public float newtonHealth = 40;
+    public float startingHealth = 40;
+
+    [SerializeField] [InspectorReadonly]
+    private float _newtonHealth = 0;
+
 
     // component references
     private new Rigidbody2D rigidbody;
@@ -23,15 +27,8 @@ public class Monster : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private ParticleSystem poofParticleSystem;
 
-    public bool isDead
-    {
-        get { return _isDead; }
-        private set { _isDead = value; }
-    }
-    private bool _isDead;
-
-
-    private Vector2 velocity;
+    public bool isDead { get => _newtonHealth <= 0; }
+    private readonly float almostZero = 0.0001f;
 
     private void Awake()
     {
@@ -44,7 +41,7 @@ public class Monster : MonoBehaviour
 
     private void Start()
     {
-        isDead = false;
+        _newtonHealth = startingHealth;
     }
 
     private void FixedUpdate()
@@ -54,45 +51,31 @@ public class Monster : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(ShouldDieFromCollision(collision))
-        {
-            Die();
-        }
+        CollisionHandler(collision);
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+    private void CollisionHandler(Collision2D collision)
     {
-        if (ShouldDieFromCollision(collision))
-        {
-            Die();
-        }
-    }
-
-    private bool ShouldDieFromCollision(Collision2D collision)
-    {
-        if (isDead) return false;
+        if (isDead) return;
 
         // if collision is with a bird, always consider it a kill
         Bird bird = collision.gameObject.GetComponent<Bird>();
         if (bird)
         {
-            newtonHealth = 0;
-            return true;
+            Die();
         }
 
         // monsters are squishy and won't hurt each other
         Monster anotherMonster = collision.gameObject.GetComponent<Monster>();
-        if (anotherMonster) return false;
+        if (anotherMonster) return;
 
         // if something falls onto the monster
         //if (collision.contacts[0].normal.y < -0.5)
-        //{
-        //    // return true;
-        //}
-        //else 
+
+        float impactDamage = 0;
+
         if(collision.gameObject.tag == "BluntObject")
         {
-            const float almostZero = 0.0001f;
             var otherAccelerometer = collision.gameObject.GetComponent<Accelerometer>();
 
             var relativeVelocity = accelerometer.velocity - otherAccelerometer.velocity;
@@ -100,25 +83,24 @@ public class Monster : MonoBehaviour
             if (accelerometer.velocity.magnitude > almostZero && otherAccelerometer.velocity.magnitude > almostZero)
             {
                 // both objects moving
-                newtonHealth -= CalculateDamage((rigidbody.mass + collision.rigidbody.mass), relativeVelocity, ouchForce);
+                impactDamage = CalculateImpactDamage((rigidbody.mass + collision.rigidbody.mass), relativeVelocity, ouchForce);
             }
             else if(accelerometer.velocity.magnitude > almostZero)
             {
                 // monster is moving
-                newtonHealth -= CalculateDamage(rigidbody.mass, relativeVelocity, ouchForce);
+                impactDamage = CalculateImpactDamage(rigidbody.mass, relativeVelocity, ouchForce);
             }
             else if(otherAccelerometer.velocity.magnitude > almostZero)
             {
                 // other is moving
-                newtonHealth -= CalculateDamage(collision.rigidbody.mass, relativeVelocity, ouchForce);
+                impactDamage = CalculateImpactDamage(collision.rigidbody.mass, relativeVelocity, ouchForce);
             }
-
         }
 
-        return newtonHealth <= 0;
+        if (impactDamage > 0) ApplyDamage(impactDamage);
     }
 
-    private float CalculateDamage(float mass, Vector2 relativeVelocity, float minForce)
+    private float CalculateImpactDamage(float mass, Vector2 relativeVelocity, float minForce)
     {
         var exertedForce = 0.5f * mass * Mathf.Pow(relativeVelocity.magnitude, 2);
 
@@ -126,9 +108,17 @@ public class Monster : MonoBehaviour
         else return 0;
     }
 
+    private void ApplyDamage(float newtonDamage)
+    {
+        _newtonHealth -= newtonDamage;
+        if (_newtonHealth <= 0) Die();
+    }
+
     private void Die()
     {
-        isDead = true;
+        // prevent permanent negative numbers
+        _newtonHealth = 0;
+
         spriteRenderer.sprite = deadSprite;
         poofParticleSystem.Play();
 
