@@ -24,7 +24,6 @@ public class LevelController : MonoBehaviour
     private void Start()
     {
         //currentLevel = SceneManager.GetActiveScene();
-        Debug.Log("Start");
     }
 
     private void OnEnable()
