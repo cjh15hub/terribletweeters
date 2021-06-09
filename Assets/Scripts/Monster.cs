@@ -15,7 +15,11 @@ public class Monster : MonoBehaviour
     public double ouchForce = 4f;
 
     [SerializeField]
-    public double newtonHealth = 40;
+    public float startingHealth = 40;
+
+    [SerializeField] [InspectorReadonly]
+    private float _newtonHealth = 0;
+
 
     // component references
     private new Rigidbody2D rigidbody;
@@ -23,13 +27,8 @@ public class Monster : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private ParticleSystem poofParticleSystem;
 
-    public bool isDead
-    {
-        get { return newtonHealth <= 0; }
-    }
-
-
-    private Vector2 velocity;
+    public bool isDead { get => _newtonHealth <= 0; }
+    private readonly float almostZero = 0.0001f;
 
     private void Awake()
     {
@@ -42,10 +41,10 @@ public class Monster : MonoBehaviour
 
     private void Start()
     {
-        
+        _newtonHealth = startingHealth;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (newtonHealth <= 0)
         {
@@ -53,14 +52,19 @@ public class Monster : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void FixedUpdate()
     {
-        TakeDamage(collision);
+
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        //TakeDamage(collision);
+        CollisionHandler(collision);
+    }
+
+    private void CollisionHandler(Collision2D collision)
+    {
+        TakeDamage(collision);
     }
 
     private void TakeDamage(Collision2D collision)
@@ -90,9 +94,17 @@ public class Monster : MonoBehaviour
         }
     }
 
+    private void ApplyDamage(float newtonDamage)
+    {
+        _newtonHealth -= newtonDamage;
+        if (_newtonHealth <= 0) Die();
+    }
+
     private void Die()
     {
-        newtonHealth = 0;
+        // prevent permanent negative numbers
+        _newtonHealth = 0;
+
         spriteRenderer.sprite = deadSprite;
         poofParticleSystem.Play();
 
