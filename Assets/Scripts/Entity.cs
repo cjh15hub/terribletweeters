@@ -5,8 +5,14 @@ public class Entity : MonoBehaviour, IDamagable
 {
     [SerializeField]
     public float initialHealth = 100;
-    public float health { get { return _health; } set { _health = value; } }
+    public float health
+    {
+        get => _health;
+        private set => _health = value;
+    }
+
     [SerializeField]
+    [InspectorReadonly]
     private float _health = 100;
 
     [SerializeField]
@@ -20,7 +26,7 @@ public class Entity : MonoBehaviour, IDamagable
 
     private void Start()
     {
-        _health = initialHealth;
+        health = initialHealth;
         accelerometer = GetComponent<Accelerometer>();
         if (accelerometer == null)
         {
@@ -73,17 +79,23 @@ public class Entity : MonoBehaviour, IDamagable
         if (!_dead)
         {
             health = 0;
-            DeathRoutine();
-            StartCoroutine(DeactivateAfterDelay());
+            OnDeath();
             _dead = true;
         }
     }
 
-    public virtual void DeathRoutine(){}
-
-    private IEnumerator DeactivateAfterDelay()
+    protected virtual void OnDeath()
     {
-        yield return new WaitForSeconds(destroyDelay);
+        DeactivateAfterDelay(destroyDelay);
+    }
+
+    protected void DeactivateAfterDelay(float delay)
+    {
+        StartCoroutine(Deactivate(delay));
+    }
+    private IEnumerator Deactivate(float delay)
+    {
+        yield return new WaitForSeconds(delay);
         this.gameObject.SetActive(false);
     }
 }

@@ -19,9 +19,10 @@ public class Monster : Entity
         poofParticleSystem = particleSystems.FirstOrDefault(p => p.gameObject.name == "PoofParticleSystem") ?? particleSystems[0];
     }
 
-    public override void DeathRoutine()
+    protected override void OnDeath()
     {
         spriteRenderer.sprite = deadSprite;
         poofParticleSystem.Play();
+        DeactivateAfterDelay(poofParticleSystem.main.duration);
     }
 }
