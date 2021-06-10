@@ -2,23 +2,26 @@ using UnityEngine;
 
 public class Accelerometer : MonoBehaviour
 {
-    private Vector2 _velocity;
     public Vector2 velocity
     {
-        get { return _velocity; }
+        get; private set;
     }
 
-    private Vector2 _impactForce;
     public Vector2 impactForce
     {
-        get { return _impactForce; }
+        get; private set;
     }
-
 
     private Rigidbody2D _rigidbody;
 
     [SerializeField]
     private float impactMultiplier = 1;
+
+    private void Start()
+    {
+        velocity = Vector2.zero;
+        impactForce = Vector2.zero;
+    }
 
     private void Awake()
     {
@@ -27,9 +30,8 @@ public class Accelerometer : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _velocity = _rigidbody.velocity;
-        _impactForce.x = impactMultiplier * _rigidbody.mass * _velocity.x;
-        _impactForce.y = impactMultiplier * _rigidbody.mass * _velocity.y;
+        velocity = _rigidbody.velocity;
+        impactForce = new Vector2(impactMultiplier * _rigidbody.mass * velocity.x, impactMultiplier * _rigidbody.mass * velocity.y);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -40,6 +42,6 @@ public class Accelerometer : MonoBehaviour
     private void Impact(Collision2D collision)
     {
         Accelerometer otherAccel = collision.gameObject.GetComponent<Accelerometer>();
-        _impactForce = otherAccel.impactForce;
+        impactForce = otherAccel.impactForce;
     }
 }

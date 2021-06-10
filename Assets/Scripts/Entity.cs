@@ -35,7 +35,7 @@ public class Entity : MonoBehaviour, IDamagable
 
     private void Update()
     {
-        if (health <= 0)
+        if (health <= 0 && !_dead)
         {
             Die();
         }
@@ -43,17 +43,24 @@ public class Entity : MonoBehaviour, IDamagable
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        Entity otherEntity = collision.gameObject.GetComponent<Entity>();
-        Accelerometer otherAccelerometer = collision.gameObject.GetComponent<Accelerometer>();
-        if (otherAccelerometer)
+        if (isDead)
         {
-            TakeDamage(otherAccelerometer.impactForce.magnitude);
-            if(otherEntity)
-            {
-                otherEntity.TakeDamage(accelerometer.impactForce.magnitude);
-            }
+            return;
         }
-        TakeDamage(accelerometer.impactForce.magnitude);
+        else
+        {
+            Entity otherEntity = collision.gameObject.GetComponent<Entity>();
+            Accelerometer otherAccelerometer = collision.gameObject.GetComponent<Accelerometer>();
+            if (otherAccelerometer)
+            {
+                TakeDamage(otherAccelerometer.impactForce.magnitude);
+                if(otherEntity)
+                {
+                    otherEntity.TakeDamage(accelerometer.impactForce.magnitude);
+                }
+            }
+            TakeDamage(accelerometer.impactForce.magnitude);
+        }
     }
 
     public void TakeDamage(float damage)

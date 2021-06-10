@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 public class Bird : MonoBehaviour
@@ -16,6 +17,7 @@ public class Bird : MonoBehaviour
     private Camera mainCamera;
     private new Rigidbody2D rigidbody;
     private SpriteRenderer spriteRenderer;
+    private Entity[] allEntities;
 
 
     public Vector2 startPosition { get; private set; }
@@ -29,6 +31,7 @@ public class Bird : MonoBehaviour
     {
         rigidbody = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        allEntities = FindObjectsOfType<Entity>();
 
         mainCamera = Camera.main;
 
@@ -124,15 +127,7 @@ public class Bird : MonoBehaviour
 
     private bool EntitiesAreMoving()
     {
-        Entity[] allEntities = GameObject.FindObjectsOfType<Entity>();
-        foreach (Entity e in allEntities)
-        {
-            if (e.isActiveAndEnabled && !e.isDead && e.GetComponent<Rigidbody2D>().velocity.magnitude > 0.0001)
-            {
-                return true;
-            }
-        }
-        return false;
+        return allEntities.Any(e => e.isActiveAndEnabled && !e.isDead && e.GetComponent<Rigidbody2D>().velocity.magnitude > 0.0001);
     }
 
     private IEnumerator ResetAfterDelay(int delay)
