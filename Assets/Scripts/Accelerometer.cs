@@ -1,35 +1,45 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Accelerometer : MonoBehaviour
 {
+    private Vector2 _velocity;
     public Vector2 velocity
     {
         get { return _velocity; }
-        private set { _velocity = value; }
     }
-    private Vector2 _velocity;
+
+    private Vector2 _impactForce;
+    public Vector2 impactForce
+    {
+        get { return _impactForce; }
+    }
 
 
-    private new Rigidbody2D rigidbody;
+    private Rigidbody2D _rigidbody;
+
+    [SerializeField]
+    private float impactMultiplier = 1;
 
     private void Awake()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
+        _rigidbody = GetComponent<Rigidbody2D>();
     }
 
     private void FixedUpdate()
     {
-        this.velocity = rigidbody.velocity;
+        _velocity = _rigidbody.velocity;
+        _impactForce.x = impactMultiplier * _rigidbody.mass * _velocity.x;
+        _impactForce.y = impactMultiplier * _rigidbody.mass * _velocity.y;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "BluntObject")
-        {
-            var otherVelocity = collision.gameObject.GetComponent<Accelerometer>()?.velocity;
-            this.velocity += otherVelocity ?? Vector2.zero;
-        }
+        Impact(collision);
+    }
+
+    private void Impact(Collision2D collision)
+    {
+        Accelerometer otherAccel = collision.gameObject.GetComponent<Accelerometer>();
+        _impactForce = otherAccel.impactForce;
     }
 }
