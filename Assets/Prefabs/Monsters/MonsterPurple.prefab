@@ -4877,7 +4877,6 @@ GameObject:
   - component: {fileID: 5452134557106578344}
   - component: {fileID: 5452134557106578345}
   - component: {fileID: 5452134557106578342}
-  - component: {fileID: 8489116441518582523}
   m_Layer: 0
   m_Name: MonsterPurple
   m_TagString: Untagged
@@ -5028,21 +5027,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ce01f2310a3328429ccbcbba9f7256b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialHealth: 30
+  _health: 30
+  destroyDelay: 1.5
   deadSprite: {fileID: 21300000, guid: 70a60dad9c6f2aa42941b53edf1428e9, type: 3}
-  ouchForce: 19.5
-  newtonHealth: 40
---- !u!114 &8489116441518582523
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5452134557106578343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe5295249da112645a67a8b8d43a3012, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5452134557491873023
 GameObject:
   m_ObjectHideFlags: 0
