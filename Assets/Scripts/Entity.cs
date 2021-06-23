@@ -5,9 +5,23 @@ public class Entity : MonoBehaviour, IDamagable
 {
     [SerializeField]
     public float initialHealth = 100;
-    public float health { get { return _health; } set { _health = value; } }
-    [SerializeField]
+
+    public float health {
+        get => _health;
+        private set => _health = value;
+    }
+
+    [SerializeField] [InspectorReadonly]
     private float _health = 100;
+
+    //public float health
+    //{
+    //    get { return _health; }
+    //    set { _health = value; }
+    //}
+
+    //[SerializeField]
+    //private float _health = 100;
 
     [SerializeField]
     private float destroyDelay = 1.5f;
@@ -20,7 +34,7 @@ public class Entity : MonoBehaviour, IDamagable
 
     private void Start()
     {
-        _health = initialHealth;
+        health = initialHealth;
         accelerometer = GetComponent<Accelerometer>();
         if (accelerometer == null)
         {
