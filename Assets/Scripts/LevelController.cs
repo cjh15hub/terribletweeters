@@ -29,7 +29,6 @@ public class LevelController : MonoBehaviour
     {
         currentLevel = SceneManager.GetActiveScene();
         monsters = FindObjectsOfType<Monster>();
-        Debug.Log("monsters: " + monsters.Length);
     }
 
     // Update is called once per frame

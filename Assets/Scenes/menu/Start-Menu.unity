@@ -157,7 +157,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.00001502, y: 132}
+  m_AnchoredPosition: {x: -0.00001502, y: 73}
   m_SizeDelta: {x: 432.5781, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &208319530
@@ -1072,7 +1072,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LevelControllerPrefab: {fileID: 2092462726676559212, guid: 8ce82480e63222246a50e104c0255809, type: 3}
-  MenuScene: {fileID: 102900000, guid: 0fcc255a27d38d94c905962fd3488828, type: 3}
+  StartScene: {fileID: 102900000, guid: 0fcc255a27d38d94c905962fd3488828, type: 3}
 --- !u!4 &2004814893
 Transform:
   m_ObjectHideFlags: 0

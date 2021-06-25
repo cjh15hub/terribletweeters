@@ -156,6 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   direction: 1
+  velocity: {x: 2, y: 0}
 --- !u!95 &56948281
 Animator:
   serializedVersion: 3
@@ -274,6 +275,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   direction: -1
+  velocity: {x: -2, y: 0}
 --- !u!95 &73481462
 Animator:
   serializedVersion: 3
@@ -453,6 +455,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2.2
   direction: -1
+  velocity: {x: -2.2, y: 0}
 --- !u!95 &842143763
 Animator:
   serializedVersion: 3
@@ -549,6 +552,7 @@ GameObject:
   - component: {fileID: 1642148195}
   - component: {fileID: 1642148194}
   - component: {fileID: 1642148193}
+  - component: {fileID: 1642148196}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -621,6 +625,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1642148196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642148192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1de69b85acee37b4c9a54fdb7345391a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MenuScene: {fileID: 102900000, guid: e152be0252efbf44a86b409d2620d288, type: 3}
 --- !u!1001 &1772839523
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -734,6 +751,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2.5
   direction: 1
+  velocity: {x: 2.5, y: 0}
 --- !u!4 &8305220466194822582
 Transform:
   m_ObjectHideFlags: 0

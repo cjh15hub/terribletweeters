@@ -10,7 +10,7 @@ public class StartMenu : MonoBehaviour
     private GameObject LevelControllerPrefab;
 
     [SerializeField]
-    private SceneAsset MenuScene;
+    private SceneAsset StartScene;
 
     public GameObject _LevelController
     {
@@ -30,9 +30,9 @@ public class StartMenu : MonoBehaviour
             throw new MissingReferenceException("Level Controller Prefab must be set.");
         }
 
-        if(MenuScene)
+        if(StartScene != null && SceneManager.GetSceneByName(StartScene.name).isLoaded == false)
         {
-            SceneManager.LoadScene(MenuScene.name, LoadSceneMode.Additive);
+            SceneManager.LoadScene(StartScene.name, LoadSceneMode.Additive);
         }
     }
 
