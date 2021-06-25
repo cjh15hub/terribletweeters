@@ -42,6 +42,9 @@ public class Accelerometer : MonoBehaviour
     private void Impact(Collision2D collision)
     {
         Accelerometer otherAccel = collision.gameObject.GetComponent<Accelerometer>();
-        impactForce = otherAccel.impactForce;
+        if (otherAccel)
+        {
+            impactForce = otherAccel.impactForce;
+        }
     }
 }
