@@ -1,6 +1,5 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Bird : MonoBehaviour
@@ -18,10 +17,12 @@ public class Bird : MonoBehaviour
     private Camera mainCamera;
     private new Rigidbody2D rigidbody;
     private SpriteRenderer spriteRenderer;
+    private Entity[] allEntities;
 
 
     public Vector2 startPosition { get; private set; }
     private bool ready;
+    private bool onCooldown;
 
     public bool isDragging { get; private set; }
 
@@ -30,6 +31,7 @@ public class Bird : MonoBehaviour
     {
         rigidbody = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        allEntities = FindObjectsOfType<Entity>();
 
         mainCamera = Camera.main;
 
@@ -45,7 +47,11 @@ public class Bird : MonoBehaviour
 
     private void Update()
     {
-        
+        if (!ready && !onCooldown && !EntitiesAreMoving())
+        {
+            onCooldown = true;
+            StartCoroutine(ResetAfterDelay(3));
+        }
     }
 
     private void FixedUpdate()
@@ -114,19 +120,26 @@ public class Bird : MonoBehaviour
         if(ready)
         {
             ready = false;
-            StartCoroutine(ResetAfterDelay());
+            StartCoroutine(ResetAfterDelay(15));
         }
         
     }
 
-    private IEnumerator ResetAfterDelay()
+    private bool EntitiesAreMoving()
     {
-        yield return new WaitForSeconds(3);
+        return allEntities.Any(e => e.isActiveAndEnabled && !e.isDead && e.GetComponent<Rigidbody2D>().velocity.magnitude > 0.0001);
+    }
+
+    private IEnumerator ResetAfterDelay(int delay)
+    {
+        yield return new WaitForSeconds(delay);
         rigidbody.isKinematic = true;
         rigidbody.velocity = Vector2.zero;
         rigidbody.position = startPosition;
+        onCooldown = false;
+        ready = true;
 
-        StartCoroutine(ReadyAfterDelay());
+        //StartCoroutine(ReadyAfterDelay());
     }
 
     private IEnumerator ReadyAfterDelay()
