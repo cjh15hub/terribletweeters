@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 42de7efeac2826f4cbfc782418c67bc6
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - LevelControllerPrefab: {fileID: 2092462726676559212, guid: 8ce82480e63222246a50e104c0255809, type: 3}
+  - StartScene: {fileID: 102900000, guid: 0fcc255a27d38d94c905962fd3488828, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

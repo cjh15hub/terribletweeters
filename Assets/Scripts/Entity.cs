@@ -11,8 +11,7 @@ public class Entity : MonoBehaviour, IDamagable
         private set => _health = value;
     }
 
-    [SerializeField]
-    [InspectorReadonly]
+    [SerializeField] [InspectorReadonly]
     private float _health = 100;
 
     [SerializeField]
