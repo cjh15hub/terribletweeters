@@ -15,19 +15,19 @@ public class LevelController : MonoBehaviour
 
     private void Awake()
     {
-        currentLevel = SceneManager.GetActiveScene();
-        //var instances = GameObject.FindObjectsOfType<LevelController>();
-        //if (instances.Length > 1) Destroy(this.gameObject);
-        //DontDestroyOnLoad(this.gameObject);
+        var instances = GameObject.FindObjectsOfType<LevelController>();
+        if (instances.Length > 1) Destroy(this.gameObject);
+        DontDestroyOnLoad(this.gameObject);
     }
 
     private void Start()
     {
-        //currentLevel = SceneManager.GetActiveScene();
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void OnEnable()
+    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        currentLevel = SceneManager.GetActiveScene();
         monsters = FindObjectsOfType<Monster>();
     }
 
