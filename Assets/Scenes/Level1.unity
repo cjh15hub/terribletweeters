@@ -596,7 +596,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5113170670336395361, guid: 5bf1fa57c6af29b47888979dcfcb6844, type: 3}
       propertyPath: orthographic size
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5705373990684045033, guid: 5bf1fa57c6af29b47888979dcfcb6844, type: 3}
       propertyPath: m_RootOrder
@@ -817,10 +817,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2092462726676559215, guid: 8ce82480e63222246a50e104c0255809, type: 3}
-      propertyPath: pauseMenu
-      value: 
-      objectReference: {fileID: 102900000, guid: b46185d38e82b3c458315d2e9c2a1074, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ce82480e63222246a50e104c0255809, type: 3}
 --- !u!1001 &1220263778

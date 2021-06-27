@@ -43,8 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c14af2bcc5976d34890913dcc7d0142b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levels:
+  Levels:
   - {fileID: 102900000, guid: 605229c93e5f3a1459a26e3dbfbc6588, type: 3}
   - {fileID: 102900000, guid: 479e854f0be4a3246ae8e65727de3f96, type: 3}
   - {fileID: 102900000, guid: 23ea0fa8ae49155489bd44448ea9f0ac, type: 3}
-  - {fileID: 102900000, guid: c24f1cc19dd696949a4e3a89111faf0d, type: 3}
+  TheEnd: {fileID: 102900000, guid: c24f1cc19dd696949a4e3a89111faf0d, type: 3}
+  PauseMenu: {fileID: 102900000, guid: b46185d38e82b3c458315d2e9c2a1074, type: 3}
