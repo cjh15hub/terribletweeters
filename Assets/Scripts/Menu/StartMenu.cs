@@ -38,9 +38,9 @@ public class StartMenu : MonoBehaviour
 
     public void StartGame()
     {
+        SceneManager.LoadScene(LevelControllerPrefab.GetComponent<LevelController>().Levels[0].name);
         _LevelController = Instantiate(LevelControllerPrefab);
         LevelController = _LevelController.GetComponent<LevelController>();
-        SceneManager.LoadScene(LevelController.levels[0].name);
     }
 
     public void QuitGame()
